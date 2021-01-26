@@ -81,4 +81,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Log.d( "TAG", "getAllEmployee: " + storeEmployee );
         return storeEmployee;
     }
+
+    public void updateEmployee(EmployeeModel employeeModel) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put( DatabaseHelper.NAME, employeeModel.getName() );
+        contentValues.put( DatabaseHelper.EMAIL, employeeModel.getEmail() );
+
+        sqLiteDatabase = this.getWritableDatabase();
+        sqLiteDatabase.update( TABLE_NAME, contentValues, ID + " = ?", new String[]{String.valueOf( employeeModel.getId() )} );
+    }
+
+    public void deleteEmployee(int id) {
+        sqLiteDatabase = this.getWritableDatabase();
+        sqLiteDatabase.delete( TABLE_NAME, ID + " = ? ", new String[] {String.valueOf( id )});
+    }
 }

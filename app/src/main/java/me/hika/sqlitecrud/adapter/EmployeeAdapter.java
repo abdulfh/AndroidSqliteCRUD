@@ -1,6 +1,8 @@
 package me.hika.sqlitecrud.adapter;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,6 +48,32 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.ViewHo
         holder.editTextName.setText( employeeModel.getName() );
         holder.editTextEmail.setText( employeeModel.getEmail() );
 
+        holder.buttonEdit.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick( View view ) {
+                String name = holder.editTextName.getText().toString();
+                String email = holder.editTextEmail.getText().toString();
+
+                EmployeeModel employeeData = new EmployeeModel();
+                employeeData.setName( name );
+                employeeData.setEmail( email );
+                employeeData.setId( employeeModel.getId() );
+
+                databaseHelper.updateEmployee(  employeeData );
+
+                notifyDataSetChanged();
+                ((Activity) context).finish();
+                context.startActivity( ((Activity) context).getIntent() );
+            }
+        } );
+        holder.buttonDelete.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick( View view ) {
+                databaseHelper.deleteEmployee( employeeModel.getId() );
+                employeeModelList.remove( position );
+                notifyDataSetChanged();
+            }
+        } );
     }
 
     @Override
